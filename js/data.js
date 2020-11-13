@@ -1,9 +1,4 @@
-/*
-Treehouse Techdegree:
-FSJS Project 2 - Data Pagination and Filtering
-*/
-
-// Array of student objects
+// Array of student objects containing name, email, registration, and picture information
 const data = [
   {
     name: {
