@@ -72,9 +72,9 @@ addPagination(data);
 
 // Creates and appends the elements needed to display a search bar on the top of the page
 
-const h2 = document.querySelector('h2');
+const header = document.querySelector('.header');
 const label = document.createElement('label');
-h2.appendChild(label);
+header.appendChild(label);
 label.setAttribute('for','search');
 label.className = 'student-search';
 label.innerHTML = `
