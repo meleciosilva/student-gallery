@@ -146,6 +146,7 @@ function searchItems(searchInput, list) {
          `;
          //inserts error message at the beginning of studentList list
          studentList.insertAdjacentHTML('afterbegin', error);
+         addPagination(searchedData);
        }
    }
 }
