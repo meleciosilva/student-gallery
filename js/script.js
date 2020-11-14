@@ -2,11 +2,14 @@
 
 // This variable represents how many data objects (students) are displayed on each page
 const perPage = 9;
-
 //selects appropriate list and assigns to studentList variable
 const studentList = document.querySelector('.student-list'); 
 //selects appropriate list and assigns to linkList variable
 const linkList = document.querySelector('.link-list');
+//selects the element with the .header class and assigns it to header variable
+const header = document.querySelector('.header');
+//creates a label element and assigns it to the label variable
+const label = document.createElement('label');
 
 /* 
 This function creates and appends the appropriate elements needed to display a single page of the correct number of students
@@ -14,10 +17,8 @@ Each student's name, picture, email address, and date of registration are displa
 */
 
 function showPage(list, page) {
-   
    const startIndex = (page * perPage) - perPage; //identifies starting point of list items to display
    const endIndex = page * perPage; //identifies ending point of list items to display
-
    //assigns studentList to an empty string in order to remove previously displayed students
    studentList.innerHTML = ''; 
    
@@ -44,7 +45,8 @@ function showPage(list, page) {
 }
 
 /* 
-This function creates and appends the elements needed to display the appropriate number of pagination buttons on the bottom of the page
+Creates and appends the elements needed to display the appropriate number of pagination buttons
+Pagination buttons appended on the bottom of the page
 */
 
 function addPagination(list) {
@@ -86,38 +88,38 @@ function addPagination(list) {
    });
 }
 
+// creates and appends a search bar on the page
+function searchBar(placeHolder) {
+   //appends the label variable to the header element
+   header.appendChild(label);
+   //assigns the 'for' and 'search' attributes to the label element
+   label.setAttribute('for','search');
+   //assigns the class .student-search to the label element
+   label.className = 'student-search';
+   //creates and inserts the HTML elements needed to display a search bar with a search button
+   label.innerHTML = `
+      <input id="search" placeholder='${placeHolder}'>
+      <button type="button"><img src="img/icn-search.svg" alt="Search icon"></button>
+   `;
+}
+
 //calls showPage() function to display students on the first page (data objects 0-8)
 showPage(data, 1);
 //calls addPagination() function to display the correct number of pagination buttons for students/objects listed in the data array
 addPagination(data);
-
-
-// SEARCH BAR //
-
-//selects the element with the .header class and assigns it to header variable
-const header = document.querySelector('.header');
-//creates a label element and assigns it to the label variable
-const label = document.createElement('label');
-//appends the label variable to the header element
-header.appendChild(label);
-//assigns the 'for' and 'search' attributes to the label element
-label.setAttribute('for','search');
-//assigns the class .student-search to the label element
-label.className = 'student-search';
-//creates and inserts the HTML elements needed to display a search bar with a search button
-label.innerHTML = `
-   <input id="search" placeholder="Search by name...">
-   <button type="button"><img src="img/icn-search.svg" alt="Search icon"></button>
-`;
+//calls searchBar() function to display the search bar on the top of the page
+searchBar('Search by name...');
 
 // selects input element with #search id and assigns it to search variable
 const search = document.querySelector('#search');
 // selects search button and assigns it to searchButton variable
 const searchButton = label.getElementsByTagName('button')[0];
 
+
 /*
 This function compares search input with data/students and displays matched names on the page
 */
+
 function searchItems(searchInput, list) {
    //creates a new data array and assigns it to searchedData variable
    let searchedData = [];
@@ -140,8 +142,8 @@ function searchItems(searchInput, list) {
       linkList.innerHTML = '';
       //creates elements needed to display error message and assigns it to error variable
       let error = `
-      <h1 style='color:red'>
-         <center>Sorry, ${searchedInputValue} cannot be found. Try again.</center>
+      <h1 style='color:#4a5568;font-size: 30px;text-align:center'>
+         Sorry, ${searchedInputValue} cannot be found. Try again.
       </h1>
       `;
       //inserts error message at the beginning of studentList list
