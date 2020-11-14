@@ -3,6 +3,9 @@
 // This variable represents how many data objects (students) are displayed on each page
 const perPage = 9;
 
+//selects appropriate list and assigns to studentList variable
+const studentList = document.querySelector('.student-list'); 
+
 /* 
 This function creates and appends the appropriate elements needed to display a single page of the correct number of students
 Each student's name, picture, email address, and date of registration are displayed
@@ -12,8 +15,7 @@ function showPage(list, page) {
    
    const startIndex = (page * perPage) - perPage; //identifies starting point of list items to display
    const endIndex = page * perPage; //identifies ending point of list items to display
-   //selects appropriate list and assigns to studentList variable
-   const studentList = document.querySelector('.student-list'); 
+
    //assigns studentList to an empty string in order to remove previously displayed students
    studentList.innerHTML = ''; 
    
@@ -108,3 +110,52 @@ label.innerHTML = `
    <button type="button"><img src="img/icn-search.svg" alt="Search icon"></button>
 `;
 
+// selects input element with #search id and assigns it to search variable
+const search = document.querySelector('#search');
+// selects search button and assigns it to searchButton variable
+const searchButton = label.getElementsByTagName('button')[0];
+
+/*
+This function compares search input with data/students and displays matched names on the page
+*/
+function searchItems(searchInput, list) {
+   //creates a new data array and assigns it to searchedData variable
+   let searchedData = [];
+   //converts search input into lowercase letters and assigns it to searchedInputValue variable
+   const searchedInputValue = searchInput.value.toLowerCase();
+   
+   for (let i = 0; i < list.length; i++) {
+      let firstName = list[i].name.first.toLowerCase();
+      let lastName = list[i].name.last.toLowerCase();
+      //condition: if search input does not equal 0 and includes characters from first or last name
+      if (searchedInputValue !== 0 && firstName.includes(searchedInputValue) || lastName.includes(searchedInputValue)) {
+         searchedData.push(list[i]); //adds data objects that meet condition into new searchedData array
+         showPage(searchedData, 1); //displays page with filtered data objects from searchedData array
+         addPagination(searchedData); //displays correct number of pagination buttons specific to search input
+      //condition: if searchedData array contains no objects/matches
+      } else if (searchedData.length === 0) {
+         //assigns studentList to an empty string in order to remove previously displayed students
+         studentList.innerHTML = '';  
+         //creates elements needed to display error message and assigns it to error variable
+         let error = `
+         <h1 style='color:red'>
+         <center>
+            Sorry, ${searchedInputValue} cannot be found. Try again.
+         </center>
+         </h1>
+         `;
+         //inserts error message at the beginning of studentList list
+         studentList.insertAdjacentHTML('afterbegin', error);
+       }
+   }
+}
+
+//calls searchItems() function when searchButton is selected
+searchButton.addEventListener('click', (e) => {
+   searchItems(search, data);
+});
+
+//calls searchItems() function as search input is being filled
+search.addEventListener('keyup', (e) => {
+   searchItems(search, data);
+}); 
