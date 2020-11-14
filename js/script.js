@@ -9,12 +9,18 @@ Each student's name, picture, email address, and date of registration are displa
 */
 
 function showPage(list, page) {
-   const startIndex = (page * perPage) - perPage;
-   const endIndex = page * perPage;
-   const studentList = document.querySelector('.student-list');
-   studentList.innerHTML = '';
+   
+   const startIndex = (page * perPage) - perPage; //identifies starting point of list items to display
+   const endIndex = page * perPage; //identifies ending point of list items to display
+   //selects appropriate list and assigns to studentList variable
+   const studentList = document.querySelector('.student-list'); 
+   //assigns studentList to an empty string in order to remove previously displayed students
+   studentList.innerHTML = ''; 
+   
    for (let i = 0; i < list.length; i++) {
-      if (i >= startIndex && i < endIndex) {
+      //HTML will only display for students within starting and ending index on selected page
+      if (i >= startIndex && i < endIndex) { 
+         //creates HTML elements needed to display for each student on selected page/button and assigned to studentItem variable
          let studentItem = ` 
             <li class = 'student-item cf'>
                <div class = 'student-details'>
@@ -27,7 +33,8 @@ function showPage(list, page) {
                </div>
             </li>
          `; 
-         studentList.insertAdjacentHTML('beforeend', studentItem);
+         //displays studentItem at the end of studentList list
+         studentList.insertAdjacentHTML('beforeend', studentItem); 
       };
    }
 }
@@ -37,47 +44,67 @@ This function creates and appends the elements needed to display the appropriate
 */
 
 function addPagination(list) {
-   let numberPages = Math.ceil(list.length / perPage);
-   const ul = document.querySelector('.link-list');
-   ul.innerHTML = '';
-   for (let i = 0; i < numberPages; i++) {
-      let pageNumber = `
+   //dynamically displays the appropriate number of pagination buttons for a given number of students 
+   let numberButtons = Math.ceil(list.length / perPage); 
+   //selects appropriate list and assigns to linkList variable
+   const linkList = document.querySelector('.link-list');
+   //assigns linkList to an empty string in order to remove previously displayed pagination buttons
+   linkList.innerHTML = '';
+
+   for (let i = 0; i < numberButtons; i++) {
+      //creates HTML elements needed to display the correct number of pagination buttons with correct number
+      let listItem = `
          <li>
             <button type='button'>${[i + 1]}</button>
          </li>
       `;
-      ul.insertAdjacentHTML('beforeend', pageNumber);
+         //displays listItem at the end of linkList list
+         linkList.insertAdjacentHTML('beforeend', listItem);
    }
-   const firstListItem = ul.firstElementChild;
-   firstListItem.className = 'active';
    
-   ul.addEventListener('click', (event) => {
-      const allButtons = ul.getAttribute('button');
-      const activeButton = event.target;
-      if (activeButton.tagName === 'BUTTON') {
-         for (let i = 0; i < allButtons; i++) {
-            ul.querySelector('.active') = '';
-            activeButton.className = 'active';
-            }
-         showPage(list, activeButton.textContent);   
-      }
+   //selects the first pagination button in linkList 
+   const firstButton = linkList.firstElementChild.firstElementChild;
+   //assigns the first pagination button an active class
+   firstButton.className = 'active';
+
+   //creates an event listener for click events
+   linkList.addEventListener('click', (e) => {
+      //creates and assigns the target event to the button variable
+      const button = e.target;
+      //selects the button with the .active class and assigns it to activeButton variable
+      const activeButton = document.querySelector('.active');
+
+      //condition = target event must be a button
+      if (button.tagName === 'BUTTON') {
+         activeButton.className = ''; //removes .active class from button with .active class
+         button.className = 'active'; //adds .active class to targeted/clicked button
+         }
+      //calls function to display the list/data of students according to selected page/button number
+      showPage(list, button.textContent);
    });
-   console.log(list);
 }
 
-// Calling showPage(list, page) and addPagination(list) functions to display first page of students and pagination buttons
-
+//calls showPage() function to display students on the first page (data objects 0-8)
 showPage(data, 1);
+//calls addPagination() function to display the correct number of pagination buttons for students/objects listed in the data array
 addPagination(data);
 
-// Creates and appends the elements needed to display a search bar on the top of the page
 
+// SEARCH BAR //
+
+//selects the element with the .header class and assigns it to header variable
 const header = document.querySelector('.header');
+//creates a label element and assigns it to the label variable
 const label = document.createElement('label');
+//appends the label variable to the header element
 header.appendChild(label);
+//assigns the 'for' and 'search' attributes to the label element
 label.setAttribute('for','search');
+//assigns the class .student-search to the label element
 label.className = 'student-search';
+//creates and inserts the HTML elements needed to display a search bar with a search button
 label.innerHTML = `
    <input id="search" placeholder="Search by name...">
    <button type="button"><img src="img/icn-search.svg" alt="Search icon"></button>
 `;
+
