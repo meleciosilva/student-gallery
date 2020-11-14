@@ -5,6 +5,8 @@ const perPage = 9;
 
 //selects appropriate list and assigns to studentList variable
 const studentList = document.querySelector('.student-list'); 
+//selects appropriate list and assigns to linkList variable
+const linkList = document.querySelector('.link-list');
 
 /* 
 This function creates and appends the appropriate elements needed to display a single page of the correct number of students
@@ -48,8 +50,6 @@ This function creates and appends the elements needed to display the appropriate
 function addPagination(list) {
    //dynamically displays the appropriate number of pagination buttons for a given number of students 
    let numberButtons = Math.ceil(list.length / perPage); 
-   //selects appropriate list and assigns to linkList variable
-   const linkList = document.querySelector('.link-list');
    //assigns linkList to an empty string in order to remove previously displayed pagination buttons
    linkList.innerHTML = '';
 
@@ -130,24 +130,26 @@ function searchItems(searchInput, list) {
       //condition: if search input does not equal 0 and includes characters from first or last name
       if (searchedInputValue !== 0 && firstName.includes(searchedInputValue) || lastName.includes(searchedInputValue)) {
          searchedData.push(list[i]); //adds data objects that meet condition into new searchedData array
+      } 
+      
+   //condition: if searchedData array contains no objects/matches
+   if (searchedData.length == 0) {
+      //assigns studentList to an empty string in order to remove previously displayed students
+      studentList.innerHTML = '';  
+      //assigns linkList to an empty string in order to remove previously displayed buttons
+      linkList.innerHTML = '';
+      //creates elements needed to display error message and assigns it to error variable
+      let error = `
+      <h1 style='color:red'>
+         <center>Sorry, ${searchedInputValue} cannot be found. Try again.</center>
+      </h1>
+      `;
+      //inserts error message at the beginning of studentList list
+      studentList.insertAdjacentHTML('afterbegin', error);
+      } else {
          showPage(searchedData, 1); //displays page with filtered data objects from searchedData array
          addPagination(searchedData); //displays correct number of pagination buttons specific to search input
-      //condition: if searchedData array contains no objects/matches
-      } else if (searchedData.length === 0) {
-         //assigns studentList to an empty string in order to remove previously displayed students
-         studentList.innerHTML = '';  
-         //creates elements needed to display error message and assigns it to error variable
-         let error = `
-         <h1 style='color:red'>
-         <center>
-            Sorry, ${searchedInputValue} cannot be found. Try again.
-         </center>
-         </h1>
-         `;
-         //inserts error message at the beginning of studentList list
-         studentList.insertAdjacentHTML('afterbegin', error);
-         addPagination(searchedData);
-       }
+      }
    }
 }
 
@@ -160,3 +162,4 @@ searchButton.addEventListener('click', (e) => {
 search.addEventListener('keyup', (e) => {
    searchItems(search, data);
 }); 
+
